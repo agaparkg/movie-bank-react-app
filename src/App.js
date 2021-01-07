@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import HeaderContent from "./components/HeaderContent";
-import "./App.css";
 import IsLoading from "./components/IsLoading";
 import MainMovieContent from "./components/MainMovieContent";
 

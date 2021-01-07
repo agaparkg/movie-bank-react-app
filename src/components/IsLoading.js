@@ -6,7 +6,7 @@ export default function IsLoading(props) {
       <img
         id="loading-img"
         src={require("../images/loading.gif").default}
-        alt=""
+        alt="loading indicator"
       />
     </div>
   );
