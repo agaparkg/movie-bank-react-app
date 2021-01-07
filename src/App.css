@@ -118,8 +118,8 @@ hr {
   transition: 0.5s ease;
   opacity: 0;
   bottom: 0;
-  /* font-size: 20px; */
-  padding: 12px;
+  font-size: 16px;
+  padding: 10px 20px;
   border-bottom-right-radius: 10px;
   border-bottom-left-radius: 10px;
   text-align: center;
