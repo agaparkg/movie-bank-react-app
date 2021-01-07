@@ -84,6 +84,19 @@ hr {
   color: #3f597c;
 }
 
+#search-inp {
+  height: 35px;
+  font-size: 1.5em;
+  outline: none;
+  color: black;
+}
+
+#search-btn {
+  font-size: 1.5em;
+  padding: 0 15px;
+  outline: none;
+}
+
 .pagination-rstrap {
   display: flex;
   justify-content: center;

@@ -51,7 +51,7 @@ export default class App extends Component {
     const { movies, isLoading, activePage, total_pages } = this.state;
     return (
       <div className="App">
-        <HeaderContent />
+        <HeaderContent handlePageChange={this.handlePageChange} />
         {isLoading ? (
           <MainMovieContent
             activePage={activePage}
