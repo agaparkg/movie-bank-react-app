@@ -4,7 +4,13 @@ import MovieList from "./MovieList";
 
 export default class MainMovieContent extends Component {
   render() {
-    const { activePage, total_pages, handlePageChange, movies } = this.props;
+    const {
+      activePage,
+      total_pages,
+      handlePageChange,
+      handleAddFavorite,
+      movies,
+    } = this.props;
     return (
       <main>
         <MoviePagination
@@ -12,7 +18,7 @@ export default class MainMovieContent extends Component {
           total_pages={total_pages}
           handlePageChange={handlePageChange}
         />
-        <MovieList movies={movies} />
+        <MovieList movies={movies} handleAddFavorite={handleAddFavorite} />
       </main>
     );
   }

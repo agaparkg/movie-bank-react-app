@@ -22,8 +22,12 @@ export default class HeaderContent extends Component {
 
   render() {
     const { inputVal } = this.state;
-    const { handlePageChange, genres, handleGenreChange } = this.props;
-    console.log("list of genres:", genres);
+    const {
+      genres,
+      handleGenreChange,
+      handleNavBarChange,
+      navbar,
+    } = this.props;
     return (
       <header>
         <div className="header-left">
@@ -42,14 +46,31 @@ export default class HeaderContent extends Component {
         <hr />
         <div className="header-center">
           <div
-            className="header-middle-tabs home active-tab"
-            onClick={() => handlePageChange(1)}
+            className={
+              navbar === "home"
+                ? "header-middle-tabs home active-tab"
+                : "header-middle-tabs home"
+            }
+            onClick={() => handleNavBarChange("home")}
           >
             HOME
           </div>
-          <div className="header-middle-tabs favorites">FAVORITES</div>
+          <div
+            className={
+              navbar === "favorites"
+                ? "header-middle-tabs favorites active-tab"
+                : "header-middle-tabs favorites"
+            }
+            onClick={() => handleNavBarChange("favorites")}
+          >
+            FAVORITES
+          </div>
           <select
-            className="header-middle-tabs genres"
+            className={
+              navbar === "genres"
+                ? "header-middle-tabs genres active-tab"
+                : "header-middle-tabs genres"
+            }
             name="genre"
             id="genre"
             onChange={(e) => handleGenreChange(e.target.value)}
@@ -66,8 +87,25 @@ export default class HeaderContent extends Component {
               );
             })}
           </select>
-          <div className="header-middle-tabs downloads">DOWNLOADS</div>
-          <div className="header-middle-tabs contact">CONTACT</div>
+          <div
+            onClick={() => handleNavBarChange("downloads")}
+            className={
+              navbar === "downloads"
+                ? "header-middle-tabs downloads active-tab"
+                : "header-middle-tabs downloads"
+            }
+          >
+            DOWNLOADS
+          </div>
+          <div
+            className={
+              navbar === "contact"
+                ? "header-middle-tabs contact active-tab"
+                : "header-middle-tabs contact"
+            }
+          >
+            CONTACT
+          </div>
         </div>
         <div className="header-right">
           {/* <Input name="search" id="search-inp" /> */}
