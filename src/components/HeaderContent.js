@@ -4,7 +4,6 @@ import { DebounceInput } from "react-debounce-input";
 
 export default class HeaderContent extends Component {
   state = {
-    genres: [],
     inputVal: "",
   };
 
@@ -14,34 +13,17 @@ export default class HeaderContent extends Component {
 
   handleSearchClick = () => {
     const { inputVal } = this.state;
-    console.log("input value is", inputVal);
-  };
-
-  componentDidMount() {
-    const url =
-      "https://api.themoviedb.org/3/genre/movie/list?api_key=df8b08ecb436696fee41a00f8d87a540&language=en-US";
-    fetch(url)
-      .then((res) => res.json())
-      .then((data) => {
-        const topGenre = { id: 45, name: "Genre" };
-        let fetchedGenres = data.genres;
-        fetchedGenres.unshift(topGenre);
-        this.setState({ genres: fetchedGenres });
-      })
-      .catch((err) => {
-        console.log(err);
-        throw err;
-      });
-  }
-
-  handleSelectedGenre = (e) => {
-    console.log(e.target.value);
+    const { handleMovieSearch } = this.props;
+    if (inputVal) {
+      handleMovieSearch(inputVal);
+      this.setState({ inputVal: "" });
+    }
   };
 
   render() {
-    const { genres, inputVal } = this.state;
-    const { handlePageChange } = this.props;
-    console.log(genres);
+    const { inputVal } = this.state;
+    const { handlePageChange, genres, handleGenreChange } = this.props;
+    console.log("list of genres:", genres);
     return (
       <header>
         <div className="header-left">
@@ -70,14 +52,14 @@ export default class HeaderContent extends Component {
             className="header-middle-tabs genres"
             name="genre"
             id="genre"
-            onClick={(e) => this.handleSelectedGenre(e)}
+            onChange={(e) => handleGenreChange(e.target.value)}
           >
             {genres.map((genre) => {
               return (
                 <option
                   key={genre.id}
                   className="genre-options"
-                  value={genre.name.toLowerCase()}
+                  value={genre.name}
                 >
                   {genre.name.toUpperCase()}
                 </option>
@@ -85,7 +67,7 @@ export default class HeaderContent extends Component {
             })}
           </select>
           <div className="header-middle-tabs downloads">DOWNLOADS</div>
-          <div className="header-middle-tabs contact">CONTACT US</div>
+          <div className="header-middle-tabs contact">CONTACT</div>
         </div>
         <div className="header-right">
           {/* <Input name="search" id="search-inp" /> */}

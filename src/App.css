@@ -78,6 +78,7 @@ hr {
   outline: none;
   background-color: #3f597c;
 }
+
 .genres:hover {
   background-color: #98c0f3;
   cursor: pointer;

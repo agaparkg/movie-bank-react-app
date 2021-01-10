@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import HeaderContent from "./components/HeaderContent";
 import IsLoading from "./components/IsLoading";
 import MainMovieContent from "./components/MainMovieContent";
+import { moviesUrl, genresUrl } from "./apiUrls";
 
 export default class App extends Component {
   constructor(props) {
@@ -12,6 +13,9 @@ export default class App extends Component {
       activePage: 1,
       total_pages: 0,
       total_results: 0,
+      genres: [],
+      selectedGenreId: "",
+      searchText: "",
     };
   }
 
@@ -19,12 +23,26 @@ export default class App extends Component {
     const { activePage } = this.state;
     this.setState({ isLoading: false });
     this.fetchJson(activePage);
+    this.fetchGenres();
   }
 
+  fetchGenres = () => {
+    fetch(genresUrl)
+      .then((res) => res.json())
+      .then((data) => {
+        const topGenre = { id: 45, name: "Genre" };
+        let fetchedGenres = data.genres;
+        fetchedGenres.unshift(topGenre);
+        this.setState({ genres: fetchedGenres, selectedGenreId: topGenre.id });
+      })
+      .catch((err) => {
+        console.log(err);
+        throw err;
+      });
+  };
+
   fetchJson = (pageNum) => {
-    fetch(
-      `https://api.themoviedb.org/3/movie/popular?api_key=df8b08ecb436696fee41a00f8d87a540&language=en-US&page=${pageNum}`
-    )
+    fetch(`${moviesUrl}&page=${pageNum}`)
       .then((res) => res.json())
       .then((data) => {
         setTimeout(() => {
@@ -40,24 +58,62 @@ export default class App extends Component {
   };
 
   handlePageChange = (pageNumber) => {
-    console.log("pageNumber is = ", pageNumber);
     const { total_pages } = this.state;
     if (pageNumber >= 1 && pageNumber <= total_pages) {
-      this.setState({ activePage: pageNumber, isLoading: false });
+      this.setState({
+        activePage: pageNumber,
+        isLoading: false,
+        searchText: "",
+      });
       this.fetchJson(pageNumber);
     }
   };
+
+  handleGenreChange = (genreName) => {
+    const { genres } = this.state;
+    const chosenGenre = genres.find((genre) => genre.name === genreName);
+    this.setState({ selectedGenreId: chosenGenre.id });
+  };
+
+  handleMovieSearch = (text) => {
+    this.setState({ searchText: text });
+  };
+
   render() {
-    const { movies, isLoading, activePage, total_pages } = this.state;
+    const {
+      movies,
+      isLoading,
+      activePage,
+      total_pages,
+      genres,
+      selectedGenreId,
+      searchText,
+    } = this.state;
+    console.log("list of movies:", movies);
+    const moviesByGenre =
+      selectedGenreId !== 45
+        ? movies.filter((movie) => movie.genre_ids.includes(selectedGenreId))
+        : movies;
+    const moviesBySearchText =
+      searchText !== ""
+        ? moviesByGenre.filter((movie) =>
+            movie.title.toLowerCase().includes(searchText)
+          )
+        : moviesByGenre;
     return (
       <div className="App">
-        <HeaderContent handlePageChange={this.handlePageChange} />
+        <HeaderContent
+          genres={genres}
+          handleMovieSearch={this.handleMovieSearch}
+          handleGenreChange={this.handleGenreChange}
+          handlePageChange={this.handlePageChange}
+        />
         {isLoading ? (
           <MainMovieContent
             activePage={activePage}
             total_pages={total_pages}
             handlePageChange={this.handlePageChange}
-            movies={movies}
+            movies={moviesBySearchText}
           />
         ) : (
           <IsLoading />
